@@ -1,5 +1,6 @@
 export * from "./calculateMinMaxDifferences";
 export * from "./consecutiveNumbers";
+export * from "./countParityCombinations";
 export * from "./frequentNumbersByPosition";
 export * from "./helpers";
 export * from "./numberArray";

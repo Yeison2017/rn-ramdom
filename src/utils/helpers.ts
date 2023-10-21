@@ -1,4 +1,8 @@
 import { SubArray } from "../interfaces";
+import {
+  findPercentageGreaterThanOrEqualToTwo,
+  percentageOcurrenceCalculator,
+} from "./percentageOcurrenceCalculator";
 
 /**
  * Genera un número entero aleatorio en un rango especificado.

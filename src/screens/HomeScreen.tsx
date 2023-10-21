@@ -3,6 +3,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { historicResult } from "../data/historicResult";
 import {
+  checkPercentage,
+  countParityCombinations,
   findPercentageGreaterThanOrEqualToTwo,
   generateRandomNumberArray,
   getRandomInt,
@@ -41,7 +43,11 @@ const HomeScreen = () => {
         uniqueResultFound = true;
       }
 
-      if (!onExpectedPercentage(newResult)) {
+      if (!expectedPercentageRange(newResult)) {
+        uniqueResultFound = false;
+      }
+
+      if (!expectedPercentageEvenOdd(newResult)) {
         uniqueResultFound = false;
       }
 
@@ -57,10 +63,10 @@ const HomeScreen = () => {
     setRandomNumbers(generatedNumbers);
     setRandomBonusNumber(bonusNumber);
 
-    onCalculate();
+    // onCalculate();
   };
 
-  const onExpectedPercentage = (generatedArray: SubArray): boolean => {
+  const expectedPercentageRange = (generatedArray: SubArray): boolean => {
     const results = percentageOcurrenceCalculator(historicResult);
 
     const isPercentageGreaterThanOrEqualToOne =
@@ -69,15 +75,19 @@ const HomeScreen = () => {
     return isPercentageGreaterThanOrEqualToOne;
   };
 
-  const onCalculate = () => {
-    const generatedArray: SubArray = [8, 9, 13, 28, 38, 13];
-    const result = hasConsecutiveNumbers(generatedArray);
-    console.log("result: ", result);
+  const expectedPercentageEvenOdd = (generatedArray: SubArray): boolean => {
+    const result = countParityCombinations(historicResult);
+    const hasPercentage = checkPercentage(result, generatedArray);
+
+    return hasPercentage;
   };
 
-  useEffect(() => {
-    generateRandomNumbers();
-  }, []);
+  const onCalculate = () => {
+    // const generatedArray: SubArray = [1, 3, 5, 7, 38, 13];
+    const result = countParityCombinations(historicResult);
+
+    console.log("result: ", JSON.stringify(result, null, 2));
+  };
 
   return (
     <View style={styles.container}>
@@ -88,6 +98,12 @@ const HomeScreen = () => {
             <Text style={styles.textNumber}>{number}</Text>
           </View>
         ))}
+        {randomNumbers.length === 0 &&
+          [0, 1, 2, 3, 4].map((number, index) => (
+            <View key={index} style={styles.containerTextNumber}>
+              <Text style={styles.textNumber}></Text>
+            </View>
+          ))}
       </View>
 
       <Text style={styles.text}>Número aleatorio del 1 al 16:</Text>
@@ -121,6 +137,7 @@ const styles = StyleSheet.create({
     padding: 4,
     borderRadius: 50,
     width: 32,
+    height: 32,
     alignItems: "center",
   },
   textNumber: {
@@ -131,6 +148,7 @@ const styles = StyleSheet.create({
     padding: 4,
     borderRadius: 50,
     width: 32,
+    height: 32,
     alignItems: "center",
   },
   textNumber2: {
