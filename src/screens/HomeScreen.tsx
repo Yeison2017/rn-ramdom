@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { historicResult } from "../data/historicResult";
 import {
+  calculateUniqueSumPorcentage,
   checkPercentage,
   countParityCombinations,
   findPercentageGreaterThanOrEqualToTwo,
   generateRandomNumberArray,
   getRandomInt,
   hasConsecutiveNumbers,
+  isPercentageGreaterOrEqualToOne,
   percentageOcurrenceCalculator,
 } from "../utils";
 import { SubArray } from "../interfaces";
@@ -58,6 +60,10 @@ const HomeScreen = () => {
       if (hasConsecutiveNumbers(newResult)) {
         uniqueResultFound = false;
       }
+
+      if (!isPercentageGreaterOrEqualToOne(newResult, historicResult)) {
+        uniqueResultFound = false;
+      }
     }
 
     setRandomNumbers(generatedNumbers);
@@ -83,8 +89,12 @@ const HomeScreen = () => {
   };
 
   const onCalculate = () => {
-    // const generatedArray: SubArray = [1, 3, 5, 7, 38, 13];
-    const result = countParityCombinations(historicResult);
+    const generatedArray: SubArray = [11, 27, 30, 33, 39, 3];
+    // const result = calculateUniqueSumPorcentage(historicResult);
+    const result = isPercentageGreaterOrEqualToOne(
+      generatedArray,
+      historicResult
+    );
 
     console.log("result: ", JSON.stringify(result, null, 2));
   };

@@ -15,3 +15,4 @@ export * from "./position5Occurrences";
 export * from "./probabilityCalculation";
 export * from "./probabilityCalculationFrom0to4";
 export * from "./rangeOccurrencesPercentageInRange";
+export * from "./uniqueSumPorcentage";
