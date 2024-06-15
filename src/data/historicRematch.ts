@@ -1,6 +1,9 @@
 import { SubArray } from "../interfaces";
 
 export const historicRematch: SubArray[] = [
+  [7, 25, 28, 39, 41, 7],
+  [8, 18, 20, 28, 41, 4],
+  [10, 26, 28, 29, 40, 15],
   [18, 19, 23, 25, 38, 14],
   [7, 12, 27, 28, 37, 16],
   [5, 11, 16, 17, 37, 13],
