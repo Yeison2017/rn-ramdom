@@ -30,3 +30,22 @@ export const performPredictiveAnalysis = (count: number = 6): number[] => {
   const frequencies = calculateFrequencies(historicResult);
   return predictNextNumbers(frequencies, count);
 };
+
+export const calculatePredictionEffectiveness = (count: number = 6): number => {
+  const lastTenResults = historicResult.slice(-10);
+  const predictedNumbers = performPredictiveAnalysis(count);
+
+  let correctPredictions = 0;
+  let totalNumbers = 0;
+
+  lastTenResults.forEach((result) => {
+    result.forEach((num) => {
+      if (predictedNumbers.includes(num)) {
+        correctPredictions++;
+      }
+      totalNumbers++;
+    });
+  });
+
+  return (correctPredictions / totalNumbers) * 100;
+};
