@@ -7,16 +7,13 @@ import {
   calculateParityPercentage,
   calculatePosition5OccurrencesPercentage,
   calculateUniqueSumPorcentage,
-  checkPercentage,
-  countParityCombinations,
-  findPercentageGreaterThanOrEqualToTwo,
   generateRandomNumberArray,
   getRandomInt,
   hasConsecutiveNumbers,
   isPercentageGreaterOrEqualToOne,
-  percentageOcurrenceCalculator,
 } from "../utils";
 import { SubArray } from "../interfaces";
+import { PredictiveAnalysis } from "../components";
 
 const HomeScreen = () => {
   const [randomNumbers, setRandomNumbers] = useState<number[]>([]);
@@ -124,6 +121,7 @@ const HomeScreen = () => {
           </Text>
         </View>
       )}
+      <PredictiveAnalysis count={6} />
     </View>
   );
 };

@@ -12,6 +12,7 @@ export * from "./parityPercentageInPosition";
 export * from "./percentageOcurrenceCalculator";
 export * from "./percentageRecurrence";
 export * from "./position5Occurrences";
+export * from "./predictiveAnalysis";
 export * from "./probabilityCalculation";
 export * from "./probabilityCalculationFrom0to4";
 export * from "./rangeOccurrencesPercentageInRange";
