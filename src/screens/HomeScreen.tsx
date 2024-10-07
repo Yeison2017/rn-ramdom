@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { historicResult } from "../data/historicResult";
 import {
@@ -121,9 +121,9 @@ const HomeScreen = () => {
         <Text style={styles.textNumber2}>{randomBonusNumber}</Text>
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={generateRandomNumbers}>
+      <Pressable style={styles.button} onPress={generateRandomNumbers}>
         <Text style={styles.textButton}>Generar números</Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 };
