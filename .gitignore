@@ -33,3 +33,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+generateProjectContent.js
+contenido_proyecto.txt

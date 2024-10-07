@@ -3,6 +3,9 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { historicResult } from "../data/historicResult";
 import {
+  calculateNumberOccurrencesPercentageInRange,
+  calculateParityPercentage,
+  calculatePosition5OccurrencesPercentage,
   calculateUniqueSumPorcentage,
   checkPercentage,
   countParityCombinations,
@@ -20,83 +23,57 @@ const HomeScreen = () => {
   const [randomBonusNumber, setRandomBonusNumber] = useState<number | null>(
     null
   );
+  const [stats, setStats] = useState<any>(null);
 
   const generateRandomNumbers = () => {
     let generatedNumbers: number[] = [];
     let bonusNumber: number | null = null;
     let uniqueResultFound = false;
 
-    // Loop para encontrar una combinación única de números.
     while (!uniqueResultFound) {
       generatedNumbers = generateRandomNumberArray(5, 1, 43);
       bonusNumber = getRandomInt(1, 16);
       generatedNumbers.sort((a, b) => a - b);
+      const newResult: SubArray = [
+        ...generatedNumbers,
+        bonusNumber,
+      ] as SubArray;
 
-      const newResult: any = [...generatedNumbers, bonusNumber];
-      const isEqualAllArray = historicResult.some((result) =>
+      const isUnique = !historicResult.some((result) =>
         result.every((num, index) => num === newResult[index])
       );
 
-      const isEqualBallot = historicResult.some((result) =>
-        result.every((num, index) => num === generatedNumbers[index])
-      );
-
-      if (!isEqualAllArray && !isEqualBallot) {
+      if (
+        isUnique &&
+        !hasConsecutiveNumbers(newResult) &&
+        isPercentageGreaterOrEqualToOne(newResult, historicResult) &&
+        !generatedNumbers.includes(bonusNumber)
+      ) {
         uniqueResultFound = true;
-      }
-
-      if (!expectedPercentageRange(newResult)) {
-        uniqueResultFound = false;
-      }
-
-      if (!expectedPercentageEvenOdd(newResult)) {
-        uniqueResultFound = false;
-      }
-
-      if (generatedNumbers.includes(bonusNumber)) {
-        uniqueResultFound = false;
-      }
-
-      if (hasConsecutiveNumbers(newResult)) {
-        uniqueResultFound = false;
-      }
-
-      if (!isPercentageGreaterOrEqualToOne(newResult, historicResult)) {
-        uniqueResultFound = false;
       }
     }
 
     setRandomNumbers(generatedNumbers);
     setRandomBonusNumber(bonusNumber);
-
-    // onCalculate();
+    calculateStats([...generatedNumbers, bonusNumber] as SubArray);
   };
 
-  const expectedPercentageRange = (generatedArray: SubArray): boolean => {
-    const results = percentageOcurrenceCalculator(historicResult);
+  const calculateStats = (newResult: SubArray) => {
+    const parityPercentage = calculateParityPercentage([newResult]);
+    const numberOccurrences = calculateNumberOccurrencesPercentageInRange([
+      newResult,
+    ]);
+    const position5Occurrences = calculatePosition5OccurrencesPercentage([
+      newResult,
+    ]);
+    const uniqueSumPercentage = calculateUniqueSumPorcentage([newResult]);
 
-    const isPercentageGreaterThanOrEqualToOne =
-      findPercentageGreaterThanOrEqualToTwo(generatedArray, results);
-
-    return isPercentageGreaterThanOrEqualToOne;
-  };
-
-  const expectedPercentageEvenOdd = (generatedArray: SubArray): boolean => {
-    const result = countParityCombinations(historicResult);
-    const hasPercentage = checkPercentage(result, generatedArray);
-
-    return hasPercentage;
-  };
-
-  const onCalculate = () => {
-    const generatedArray: SubArray = [11, 27, 30, 33, 39, 3];
-    // const result = calculateUniqueSumPorcentage(historicResult);
-    const result = isPercentageGreaterOrEqualToOne(
-      generatedArray,
-      historicResult
-    );
-
-    console.log("result: ", JSON.stringify(result, null, 2));
+    setStats({
+      parityPercentage,
+      numberOccurrences,
+      position5Occurrences,
+      uniqueSumPercentage: uniqueSumPercentage[0],
+    });
   };
 
   return (
@@ -109,21 +86,44 @@ const HomeScreen = () => {
           </View>
         ))}
         {randomNumbers.length === 0 &&
-          [0, 1, 2, 3, 4].map((number, index) => (
+          [0, 1, 2, 3, 4].map((_, index) => (
             <View key={index} style={styles.containerTextNumber}>
               <Text style={styles.textNumber}></Text>
             </View>
           ))}
       </View>
-
       <Text style={styles.text}>Número aleatorio del 1 al 16:</Text>
       <View style={styles.containerTextNumber2}>
         <Text style={styles.textNumber2}>{randomBonusNumber}</Text>
       </View>
-
       <Pressable style={styles.button} onPress={generateRandomNumbers}>
         <Text style={styles.textButton}>Generar números</Text>
       </Pressable>
+      {stats && (
+        <View style={styles.statsContainer}>
+          <Text style={styles.statsTitle}>Estadísticas:</Text>
+          <Text>
+            Paridad: {stats.parityPercentage.even.toFixed(2)}% pares,{" "}
+            {stats.parityPercentage.odd.toFixed(2)}% impares
+          </Text>
+          <Text>
+            Números ≤ 22: {stats.numberOccurrences.lessThanOrEqual22.toFixed(2)}
+            %
+          </Text>
+          <Text>
+            Números ≥ 23:{" "}
+            {stats.numberOccurrences.greaterThanOrEqual23.toFixed(2)}%
+          </Text>
+          <Text>
+            Número bonus en primeros 5:{" "}
+            {stats.position5Occurrences.withPosition5.toFixed(2)}%
+          </Text>
+          <Text>
+            Suma única: {stats.uniqueSumPercentage.uniqueSum} (
+            {stats.uniqueSumPercentage.porcentage.toFixed(2)}%)
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -180,5 +180,15 @@ const styles = StyleSheet.create({
   },
   textButton: {
     color: "#fff",
+  },
+  statsContainer: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 5,
+  },
+  statsTitle: {
+    fontWeight: "bold",
+    marginBottom: 5,
   },
 });
