@@ -1,6 +1,9 @@
 import { SubArray } from "../interfaces";
 
 export const historicBallots: SubArray[] = [
+  [10, 14, 19, 24, 39, 5],
+  [1, 9, 21, 39, 41, 15],
+  [9, 21, 36, 37, 41, 9],
   [5, 12, 17, 37, 42, 12],
   [5, 16, 17, 27, 36, 4],
   [2, 12, 15, 35, 37, 9],
